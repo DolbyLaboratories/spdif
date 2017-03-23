@@ -1,0 +1,76 @@
+spdif v1.0 Readme.
+
+The spdif program is an AC-3 or E-AC-3 file formatter that will wrap the frames in  
+the S/PDIF format (including preamble words and zero-padding) 
+such that the resulting output file can be played as PCM into any 
+S/PDIF Dolby Digital receiver.  Alternately, the output file can be 
+burned to a CD and played out of the digital output of a CD or DVD player.
+
+Input AC-3 or E-AC-3 files must not have a framesize greater than 1532 words.
+Note: bsmod will default to 0 for E-AC-3 files.
+
+Usage: spdif [-h] [-i<filename.ext>] [-o<filename.ext>] [-a] [-v] [-d] [-n<#>]
+
+Usage: SPDIF [-h] [-i<filename.ext>] [-o<filename.ext>] [-a] [-v] [-d] [-n<#>]
+       -h     Show this usage message and abort
+       -i     Input AC-3 or E-AC-3 file name (default output.ac3) (or .sdf if deformat)
+       -o     Output SPDIF file name (default output.sdf) (or .ac3 if deformat)
+       -a     Use alternate packing method - aligns 2/3 pt (not valid for E-AC-3 files)
+       -v     Verbose mode. Display frame number and % done
+       -fddp  Force DDPLUS style formatting (no effect for deformatting)
+       -d     Deformat.  Output AC-3 file from SPDIF input file
+       -n<#>  Change the SPDIF data_stream_number in the burst_info word.
+              Use -n<stream#> for formatting only. stream# range:0-7. Default=0.
+
+Release Notes v1.0
+==================
+* Code cleanup for open source release
+
+
+Release Notes v0.9
+==================
+* Added -fddp command.  This will force DD bitstreams (.ac3) to be packed as DD+ bitstreams. 
+  There is no need to specify this switch when defomating data (-d)
+
+
+Release Notes v0.7
+==================
+
+* Added support forcorrect IEC header information for DD+
+
+* Increased buffer sizes to incorporate higher bit rates allowed by DD+
+
+
+
+Release Notes v0.6
+==================
+
+* Merged in support for handling EC3 streams with less than 6 blocks (from mblocks branch)
+
+* Added new test cases for streams with less than 6 blocks
+
+Release Notes v0.5
+==================
+
+* Added support for timecode stripping
+SPDIF will skip over the timecode in the DD stream, and will output to the
+spdif format without the timecode.
+
+* Increased modularity using separate function for getting a timeslice
+
+Release Notes v0.4
+==================
+
+* Added support for DD+ (E-AC-3) files
+SPDIF will now look at the bsid to determine whether the file is DD
+or DD+.  If DD+, it will default bsmod to 0, and will read in 
+framesize directly from the bitstream.  The rest of the algorithm is
+the same as with DD.
+
+* Enhanced error checking
+Will now error if framesize of the DD or DD+ frame is greater than 1532 words,
+which will be 1532 + 4 (preamble) = 1536 words, the max framesize of DD over
+SPDIF.  Also, will error if trying to use alternate packing with DD+ files.
+
+* Added testing harness
+Documentation located in test/doc/Spdif_tests.doc
